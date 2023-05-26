@@ -1,0 +1,42 @@
+﻿version: "3"
+#add depends on container check
+#ENV variable instead of IP hard code
+
+services:
+  boerse:
+    container_name: boerse
+    build: ./boerse
+    environment:
+      port: "11000"
+    networks:
+      - app-network
+    volumes:
+      - ./boerse/data:/app/data
+    ports:
+      - "11000:11000/udp"
+
+  bank_1:
+    container_name: bank_1
+    build: ./bank
+    networks:
+      - app-network
+    volumes:
+      - ./bank/data:/app/data
+    ports:
+      - "11001:11001/udp"
+      - "11002:11002"
+  
+  bank_2:
+    container_name: bank_2
+    build: ./bank
+    networks:
+      - app-network
+    volumes:
+      - ./bank/data:/app/data
+    ports:
+      - "11005:11005/udp"
+      - "11006:11006"
+
+networks:
+  app-network:
+    driver: bridge
